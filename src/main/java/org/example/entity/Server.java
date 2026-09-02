@@ -49,6 +49,14 @@ public class Server {
     @Column(name = "os")
     private String os;
 
+    /** Количество ядер ЦП */
+    @Column(name = "vcpu")
+    private Integer vCpu;
+
+    /** Объем ОЗУ в ГБ */
+    @Column(name = "ram_gb")
+    private Integer ramGb;
+
     /** Характеристики дисков сервера */
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Disk> disks = new ArrayList<>();

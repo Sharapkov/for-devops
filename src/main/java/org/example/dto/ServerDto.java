@@ -28,5 +28,50 @@ public class ServerDto {
     private ProjectShortDto project;
     private String os;
 
+    /** Количество ядер ЦП */
+    private Integer vCpu;
+
+    /** Объем ОЗУ в ГБ */
+    private Integer ramGb;
+
+    /** Общий объем дисков типа HDD */
+    private Integer totalHddGb;
+
+    /** Общий объем дисков типа SSD */
+    private Integer totalSsdGb;
+
+    /** Общий объем дисков всех типов */
+    private Integer totalAllGb;
+
     private List<DiskDto> disks;
+
+    public void computeDiskTotals() {
+        if (disks == null || disks.isEmpty()) {
+            this.totalHddGb = 0;
+            this.totalSsdGb = 0;
+            this.totalAllGb = 0;
+            return;
+        }
+        int hdd = 0, ssd = 0;
+        for (DiskDto disk : disks) {
+            int size = disk.getSizeGb() != null ? disk.getSizeGb() : 0;
+            String type = disk.getType();
+            if (type == null) continue;
+            switch (type) {
+                case "HDD":
+                    hdd += size;
+                    break;
+                case "SSD":
+                    ssd += size;
+                    break;
+                default:
+                    hdd += size;
+                    ssd += size;
+                    break;
+            }
+        }
+        this.totalHddGb = hdd;
+        this.totalSsdGb = ssd;
+        this.totalAllGb = hdd + ssd;
+    }
 }

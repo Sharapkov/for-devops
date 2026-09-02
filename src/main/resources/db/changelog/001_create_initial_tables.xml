@@ -127,4 +127,12 @@
         </createTable>
     </changeSet>
 
+    <!-- Add vcpu and ram_gb columns to servers table -->
+    <changeSet id="006" author="devops">
+        <addColumn tableName="servers">
+            <column name="vcpu" type="INTEGER"/>
+            <column name="ram_gb" type="INTEGER"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
