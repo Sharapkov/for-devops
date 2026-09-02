@@ -1,10 +1,13 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.ProjectDto;
+import org.example.dto.ProjectShortDto;
 import org.example.service.ProjectService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,19 +20,8 @@ public class ProjectController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProjectDto> findAll() {
+    public List<ProjectShortDto> findAll() {
         return projectService.findAll();
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ProjectDto findById(@PathVariable Long id) {
-        return projectService.findById(id);
-    }
-
-    @GetMapping("/name/{name}")
-    @ResponseStatus(HttpStatus.OK)
-    public ProjectDto findByName(@PathVariable String name) {
-        return projectService.findByName(name);
-    }
 }

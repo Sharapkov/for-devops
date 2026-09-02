@@ -1,7 +1,7 @@
 package org.example.repository;
 
-import org.example.entity.Server;
 import org.example.dto.ServerSummaryDto;
+import org.example.entity.Server;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ServerRepository extends JpaRepository<Server, Long> {
@@ -20,9 +19,9 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
 
     @Query("SELECT new org.example.dto.ServerSummaryDto(s.id, s.hostname, s.ipAddress, s.role) " +
             "FROM Server s WHERE s.project.id = ?1")
-    List<ServerSummaryDto> findShortDtoServers(Long projectId);
+    List<ServerSummaryDto> findShortDtoServersByProjectId(Long projectId);
 
     @Query("SELECT new org.example.dto.ServerSummaryDto(s.id, s.hostname, s.ipAddress, s.role) " +
             "FROM Server s WHERE s.project.id = ?1")
-    Page<ServerSummaryDto> findShortDtoServers(Long projectId, Pageable pageable);
+    Page<ServerSummaryDto> findShortDtoServersByProjectId(Long projectId, Pageable pageable);
 }

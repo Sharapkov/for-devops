@@ -5,40 +5,30 @@ import org.example.dto.DiskDto;
 import org.example.dto.ServerDto;
 import org.example.dto.ServerSummaryDto;
 import org.example.entity.Disk;
-import org.example.entity.Project;
 import org.example.entity.Server;
 import org.example.entity.enums.DiskType;
 import org.example.mapper.ServerMapper;
-import org.example.repository.ProjectRepository;
 import org.example.repository.ServerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class ServerService {
 
     private final ServerRepository serverRepository;
-    private final ProjectRepository projectRepository;
     private final ServerMapper serverMapper;
 
-    public List<ServerDto> findAll() {
-        return serverRepository.findAll().stream()
-                .map(serverMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
+    // ok
     public ServerDto findById(Long id) {
         Server server = serverRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Server not found with id: " + id));
         return serverMapper.toDto(server);
     }
 
+    // ok
     @Transactional
     public ServerDto create(ServerDto dto) {
         if (serverRepository.existsByHostname(dto.getHostname())) {
@@ -51,10 +41,12 @@ public class ServerService {
         Server server = new Server();
         serverMapper.updateFromDto(dto, server);
         mapBusinessFields(dto, server);
-        server = serverRepository.save(server);
+        server = serverRepository.saveAndFlush(server);
         return serverMapper.toDto(server);
     }
 
+
+    // ok
     @Transactional
     public ServerDto update(Long id, ServerDto dto) {
         Server server = serverRepository.findById(id)
@@ -70,10 +62,11 @@ public class ServerService {
 
         serverMapper.updateFromDto(dto, server);
         mapBusinessFields(dto, server);
-        server = serverRepository.save(server);
+        server = serverRepository.saveAndFlush(server);
         return serverMapper.toDto(server);
     }
 
+    // ok
     @Transactional
     public void delete(Long id) {
         if (!serverRepository.existsById(id)) {
@@ -82,20 +75,15 @@ public class ServerService {
         serverRepository.deleteById(id);
     }
 
+    // ok
     @Transactional(readOnly = true)
     public Page<ServerSummaryDto> findByProjectId(Long projectId, Pageable pageable) {
-        return serverRepository.findShortDtoServers(projectId, pageable);
+        return serverRepository.findShortDtoServersByProjectId(projectId, pageable);
     }
 
-    private void mapBusinessFields(ServerDto dto, Server server) {
-        // Handle project
-        if (dto.getProjectName() != null && !dto.getProjectName().isEmpty()) {
-            Project project = projectRepository.findByName(dto.getProjectName())
-                    .orElseThrow(() -> new RuntimeException("Project not found with name: " + dto.getProjectName()));
-            server.setProject(project);
-        }
 
-        // Handle disks
+    // todo: вынести в маппер
+    private void mapBusinessFields(ServerDto dto, Server server) {
         server.getDisks().clear();
         if (dto.getDisks() != null) {
             for (DiskDto diskDto : dto.getDisks()) {

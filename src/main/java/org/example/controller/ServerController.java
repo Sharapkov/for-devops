@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/servers")
@@ -61,9 +60,9 @@ public class ServerController {
         }
     }
 
-    @GetMapping("/project")
+    @GetMapping("/by-project/{projectId}")
     public ResponseEntity<Page<ServerSummaryDto>> findByProjectId(
-            @RequestParam Long projectId,
+            @PathVariable Long projectId,
             @PageableDefault(size = 10, page = 0) Pageable pageable) {
         try {
             Page<ServerSummaryDto> servers = serverService.findByProjectId(projectId, pageable);

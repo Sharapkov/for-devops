@@ -1,8 +1,8 @@
 package org.example.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -18,13 +18,14 @@ public class ServerDto {
     @NotBlank(message = "Hostname is required")
     private String hostname;
 
+    // todo проверить валидацию
     @NotBlank(message = "IP address is required")
     @Pattern(regexp = "^(\\d{1,3}\\.){3}\\d{1,3}(/(\\d{1,2}))?$", message = "Invalid IP address format")
     private String ipAddress;
 
     private String role;
     private String environment;
-    private String projectName;
+    private ProjectShortDto project;
     private String os;
 
     private List<DiskDto> disks;

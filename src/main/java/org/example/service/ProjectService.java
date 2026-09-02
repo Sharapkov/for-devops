@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ProjectDto;
+import org.example.dto.ProjectShortDto;
 import org.example.entity.Project;
 import org.example.mapper.ProjectMapper;
 import org.example.repository.ProjectRepository;
@@ -20,9 +21,9 @@ public class ProjectService {
     private final ServerRepository serverRepository;
     private final ProjectMapper projectMapper;
 
-    public List<ProjectDto> findAll() {
+    public List<ProjectShortDto> findAll() {
         return projectRepository.findAll().stream()
-                .map(projectMapper::toDto)
+                .map(projectMapper::toShortDto)
                 .collect(Collectors.toList());
     }
 
@@ -31,7 +32,7 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found with id: " + id));
         ProjectDto dto = projectMapper.toDto(project);
-        dto.setServers(serverRepository.findShortDtoServers(project.getId()));
+        dto.setServers(serverRepository.findShortDtoServersByProjectId(project.getId()));
         return dto;
     }
 
@@ -40,7 +41,7 @@ public class ProjectService {
         Project project = projectRepository.findByName(name)
                 .orElseThrow(() -> new RuntimeException("Project not found with name: " + name));
         ProjectDto dto = projectMapper.toDto(project);
-        dto.setServers(serverRepository.findShortDtoServers(project.getId()));
+        dto.setServers(serverRepository.findShortDtoServersByProjectId(project.getId()));
         return dto;
     }
 }
