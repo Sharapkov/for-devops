@@ -55,13 +55,12 @@ public class Connectivity {
     @Column(name = "subnet_name")
     private String subnetName;
 
+
+    // todo:  добавить фичу с батч-созданием
+    //  с фронта ожидаю string1, sting2, string3 через запятую, убираю запятые и обрезаю пробелы. в цикле создаю entity
     /** IP или подсеть источника (IP/маска, например: 192.168.10.0/24) */
     @Column(name = "source_ip")
     private String sourceIp;
-
-    /** IP или подсеть назначения (IP/маска, например: 192.168.10.0/24) */
-    @Column(name = "destination_ip")
-    private String destinationIp;
 
     /** Протоколы и порты доступа (многострочное значение) */
     @Lob
@@ -107,15 +106,6 @@ public class Connectivity {
     @Lob
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
-
-    /** Серверы, связанные с данной связностью (один или несколько) */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "connectivity_servers",
-            joinColumns = @JoinColumn(name = "connectivity_id"),
-            inverseJoinColumns = @JoinColumn(name = "server_id")
-    )
-    private List<Server> servers = new ArrayList<>();
 
     /** Дата и время создания записи */
     @Column(name = "created_at")

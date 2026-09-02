@@ -61,6 +61,15 @@ public class Server {
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Disk> disks = new ArrayList<>();
 
+    /** Сетевые связности сервера */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "connectivity_servers",
+            joinColumns = @JoinColumn(name = "server_id"),
+            inverseJoinColumns = @JoinColumn(name = "connectivity_id")
+    )
+    private List<Connectivity> connectivities = new ArrayList<>();
+
     /** Дата и время создания записи */
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -84,6 +93,11 @@ public class Server {
     public void addDisk(Disk disk) {
         disks.add(disk);
         disk.setServer(this);
+    }
+
+    /** Добавляет связность к серверу (устанавливает обратную связь) */
+    public void addConnectivity(Connectivity connectivity) {
+        connectivities.add(connectivity);
     }
 
 }

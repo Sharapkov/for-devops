@@ -45,6 +45,9 @@ public class ServerDto {
 
     private List<DiskDto> disks;
 
+    private List<ConnectivityDto> connectivities;
+
+    /** Метод для вычисления суммарных объемов дисков */
     public void computeDiskTotals() {
         if (disks == null || disks.isEmpty()) {
             this.totalHddGb = 0;

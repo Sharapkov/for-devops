@@ -33,5 +33,4 @@ public class ConnectivityDto {
     private String status;
 
     private String note;
-    private List<Long> serverIds;
 }
