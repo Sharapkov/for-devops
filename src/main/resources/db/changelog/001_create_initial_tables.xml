@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Projects table -->
+    <changeSet id="001" author="devops">
+        <createTable tableName="projects">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <insert tableName="projects">
+            <column name="name" value="ЕЦП"/>
+            <column name="created_at" valueDate="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+        </insert>
+        <insert tableName="projects">
+            <column name="name" value="Сайт «Московские Кварталы»"/>
+            <column name="created_at" valueDate="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+        </insert>
+        <insert tableName="projects">
+            <column name="name" value="CRM «Московские Кварталы»"/>
+            <column name="created_at" valueDate="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+        </insert>
+        <insert tableName="projects">
+            <column name="name" value="Инфраструктура"/>
+            <column name="created_at" valueDate="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+        </insert>
+    </changeSet>
+
+    <!-- Servers table -->
+    <changeSet id="002" author="devops">
+        <createTable tableName="servers">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="hostname" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="ip_address" type="VARCHAR(45)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="environment" type="VARCHAR(100)"/>
+            <column name="project_id" type="BIGINT">
+                <constraints foreignKeyName="fk_servers_project" references="projects(id)"/>
+            </column>
+            <column name="os" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Disks table -->
+    <changeSet id="003" author="devops">
+        <createTable tableName="disks">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="server_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_disks_server" references="servers(id)"/>
+            </column>
+            <column name="disk_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size_gb" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Connectivities table -->
+    <changeSet id="004" author="devops">
+        <createTable tableName="connectivities">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="service" type="VARCHAR(255)"/>
+            <column name="direction" type="VARCHAR(50)"/>
+            <column name="subnet_name" type="VARCHAR(255)"/>
+            <column name="source_ip" type="VARCHAR(255)"/>
+            <column name="destination_ip" type="VARCHAR(255)"/>
+            <column name="protocols_and_ports" type="TEXT"/>
+            <column name="justification" type="TEXT"/>
+            <column name="validity_type" type="VARCHAR(50)"/>
+            <column name="until_date" type="DATE"/>
+            <column name="request_number" type="VARCHAR(100)"/>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Connectivity-Servers join table (ManyToMany) -->
+    <changeSet id="005" author="devops">
+        <createTable tableName="connectivity_servers">
+            <column name="connectivity_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_connectivity_servers_connectivity" references="connectivities(id)"/>
+            </column>
+            <column name="server_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_connectivity_servers_server" references="servers(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
