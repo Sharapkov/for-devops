@@ -27,6 +27,15 @@ public interface ConnectivityMapper {
     @Mapping(target = "direction", source = "direction", qualifiedByName = "connectivityDirectionFromValue")
     @Mapping(target = "validityType", source = "validityType", qualifiedByName = "validityTypeFromValue")
     @Mapping(target = "status", source = "status", qualifiedByName = "connectivityStatusFromValue")
+    Connectivity toEntity(ConnectivityDto dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "type", source = "type", qualifiedByName = "connectivityTypeFromValue")
+    @Mapping(target = "direction", source = "direction", qualifiedByName = "connectivityDirectionFromValue")
+    @Mapping(target = "validityType", source = "validityType", qualifiedByName = "validityTypeFromValue")
+    @Mapping(target = "status", source = "status", qualifiedByName = "connectivityStatusFromValue")
     void updateFromDto(ConnectivityDto dto, @MappingTarget Connectivity connectivity);
 
     @Named("connectivityTypeToString")

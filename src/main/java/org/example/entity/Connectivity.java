@@ -1,8 +1,8 @@
 package org.example.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.example.entity.enums.ConnectivityDirection;
 import org.example.entity.enums.ConnectivityStatus;
 import org.example.entity.enums.ConnectivityType;
@@ -11,8 +11,6 @@ import org.example.entity.enums.ValidityType;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Сущность "Связность".
@@ -61,6 +59,10 @@ public class Connectivity {
     /** IP или подсеть источника (IP/маска, например: 192.168.10.0/24) */
     @Column(name = "source_ip")
     private String sourceIp;
+
+    /** IP или подсеть назначения (IP/маска, например: 192.168.10.0/24) */
+    @Column(name = "destination_ip")
+    private String destinationIp;
 
     /** Протоколы и порты доступа (многострочное значение) */
     @Lob

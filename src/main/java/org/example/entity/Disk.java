@@ -1,12 +1,11 @@
 package org.example.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.example.entity.enums.DiskType;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 /**
  * Сущность "Диск".
@@ -37,22 +36,4 @@ public class Disk {
     @Column(name = "size_gb", nullable = false)
     private Integer sizeGb;
 
-    /** Дата и время создания записи */
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    /** Дата и время последнего обновления записи */
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }

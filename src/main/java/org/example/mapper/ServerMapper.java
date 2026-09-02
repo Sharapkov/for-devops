@@ -1,18 +1,19 @@
 package org.example.mapper;
 
 import org.example.dto.ConnectivityDto;
+import org.example.dto.DiskDto;
 import org.example.dto.ServerDto;
 import org.example.entity.Connectivity;
+import org.example.entity.Disk;
 import org.example.entity.Server;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {DiskMapper.class})
+@Mapper(componentModel = "spring", uses = {DiskMapper.class, ConnectivityMapper.class})
 public interface ServerMapper {
 
     @Mapping(target = "connectivities", ignore = true)
@@ -29,6 +30,21 @@ public interface ServerMapper {
     default void computeDiskTotals(Server server, @MappingTarget ServerDto dto) {
         dto.computeDiskTotals();
     }
+
+    @AfterMapping
+    default void mapDisks(@MappingTarget Server server, ServerDto dto) {
+        server.getDisks().clear();
+        if (dto.getDisks() != null) {
+            for (DiskDto diskDto : dto.getDisks()) {
+                Disk disk = toDisk(diskDto);
+                server.addDisk(disk);
+            }
+        }
+    }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "server", ignore = true)
+    Disk toDisk(DiskDto dto);
 
     @AfterMapping
     default void mapConnectivities(Server server, @MappingTarget ServerDto dto) {

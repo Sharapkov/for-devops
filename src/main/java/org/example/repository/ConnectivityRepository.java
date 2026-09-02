@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ConnectivityRepository extends JpaRepository<Connectivity, Long> {
 
+    List<Connectivity> findAllByOrderByCreatedAtDesc();
+
 }

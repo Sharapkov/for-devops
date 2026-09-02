@@ -62,7 +62,7 @@ public class Server {
     private List<Disk> disks = new ArrayList<>();
 
     /** Сетевые связности сервера */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "connectivity_servers",
             joinColumns = @JoinColumn(name = "server_id"),
@@ -93,11 +93,6 @@ public class Server {
     public void addDisk(Disk disk) {
         disks.add(disk);
         disk.setServer(this);
-    }
-
-    /** Добавляет связность к серверу (устанавливает обратную связь) */
-    public void addConnectivity(Connectivity connectivity) {
-        connectivities.add(connectivity);
     }
 
 }

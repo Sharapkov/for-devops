@@ -1,13 +1,9 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.DiskDto;
 import org.example.dto.ServerDto;
 import org.example.dto.ServerSummaryDto;
-import org.example.entity.Connectivity;
-import org.example.entity.Disk;
 import org.example.entity.Server;
-import org.example.entity.enums.DiskType;
 import org.example.mapper.ServerMapper;
 import org.example.repository.ServerRepository;
 import org.springframework.data.domain.Page;
@@ -15,14 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class ServerService {
 
     private final ServerRepository serverRepository;
-    private final ConnectivityService connectivityService;
     private final ServerMapper serverMapper;
 
     // ok
@@ -44,7 +37,6 @@ public class ServerService {
 
         Server server = new Server();
         serverMapper.updateFromDto(dto, server);
-        mapBusinessFields(dto, server);
         server = serverRepository.saveAndFlush(server);
         return serverMapper.toDto(server);
     }
@@ -65,7 +57,6 @@ public class ServerService {
         }
 
         serverMapper.updateFromDto(dto, server);
-        mapBusinessFields(dto, server);
         server = serverRepository.saveAndFlush(server);
         return serverMapper.toDto(server);
     }
@@ -85,22 +76,4 @@ public class ServerService {
         return serverRepository.findShortDtoServersByProjectId(projectId, pageable);
     }
 
-
-    private void mapBusinessFields(ServerDto dto, Server server) {
-        server.getDisks().clear();
-        if (dto.getDisks() != null) {
-            for (DiskDto diskDto : dto.getDisks()) {
-                Disk disk = new Disk();
-                disk.setType(DiskType.valueOf(diskDto.getType()));
-                disk.setSizeGb(diskDto.getSizeGb());
-                server.addDisk(disk);
-            }
-        }
-
-        server.getConnectivities().clear();
-        if (dto.getConnectivities() != null && !dto.getConnectivities().isEmpty()) {
-            List<Connectivity> connectivities = connectivityService.saveConnectivitiesFromDto(dto.getConnectivities());
-            server.getConnectivities().addAll(connectivities);
-        }
-    }
 }

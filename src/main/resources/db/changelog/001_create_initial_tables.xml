@@ -78,10 +78,6 @@
             <column name="size_gb" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 

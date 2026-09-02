@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ServerRepository extends JpaRepository<Server, Long> {
@@ -17,9 +17,7 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
 
     boolean existsByIpAddress(String ipAddress);
 
-    @Query("SELECT new org.example.dto.ServerSummaryDto(s.id, s.hostname, s.ipAddress, s.role) " +
-            "FROM Server s WHERE s.project.id = ?1")
-    List<ServerSummaryDto> findShortDtoServersByProjectId(Long projectId);
+    Optional<Server> findByIpAddress(String ipAddress);
 
     @Query("SELECT new org.example.dto.ServerSummaryDto(s.id, s.hostname, s.ipAddress, s.role) " +
             "FROM Server s WHERE s.project.id = ?1")

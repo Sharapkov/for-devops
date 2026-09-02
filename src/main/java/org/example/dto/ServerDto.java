@@ -45,6 +45,7 @@ public class ServerDto {
 
     private List<DiskDto> disks;
 
+    /** Связи сервера (только для чтения, управление через /api/connectivities) */
     private List<ConnectivityDto> connectivities;
 
     /** Метод для вычисления суммарных объемов дисков */

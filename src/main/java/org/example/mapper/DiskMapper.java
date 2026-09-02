@@ -4,6 +4,7 @@ import org.example.dto.DiskDto;
 import org.example.entity.Disk;
 import org.example.entity.enums.DiskType;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
@@ -11,6 +12,10 @@ import org.mapstruct.Named;
 public interface DiskMapper {
 
     DiskDto toDto(Disk disk);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "server", ignore = true)
+    Disk toEntity(DiskDto dto);
 
     void updateFromDto(DiskDto dto, @MappingTarget Disk disk);
 
